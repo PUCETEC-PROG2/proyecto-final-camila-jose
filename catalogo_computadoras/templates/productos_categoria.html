@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{% load static %}
+{% load humanize %}
+
+{% block content %}
+<div class="container mt-4">
+    <h1 class="text-center">Productos de {{ categoria }}</h1>
+    <br>
+    <div class="row">
+        {% for producto in productos %}
+        <div class="col-md-4 producto">
+            <div class="card">
+                <img src="{{ producto.imagen.url }}" class="card-img-top" alt="{{ producto.nombre }}">
+                <div class="card-body">
+                    <h5 class="card-title">{{ producto.nombre }}</h5>
+                    <p class="card-text">{{ producto.descripcion }}</p>
+                    <p class="card-text"><strong>Precio: ${{ producto.precio|floatformat:2|intcomma }}</strong></p>
+                </div>
+            </div>
+        </div>
+        {% empty %}
+        <div class="col-12">
+            <p class="text-center">No hay productos en esta categoría.</p>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}
