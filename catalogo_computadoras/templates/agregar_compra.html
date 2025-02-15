@@ -1,13 +1,98 @@
-{% extends "base.html" %}
-{% load static %}
+{% extends 'base.html' %}
 
 {% block content %}
-<div class="container mt-4">
-    <h1 class="text-center">Agregar Compra</h1>
-    <form method="post">
-        {% csrf_token %}
-        {{ form.as_p }}
-        <button type="submit" class="btn btn-primary">Guardar</button>
-    </form>
-</div>
+<h1 class="text-center">Nueva Compra</h1>
+<form method="post" class="container mt-4">
+    {% csrf_token %}
+
+    <!-- Campo de selección de cliente -->
+    <div class="mb-3">
+        <label for="cliente" class="form-label">Cliente:</label>
+        <select name="cliente" id="cliente" class="form-select" required>
+            <option value="">Selecciona un cliente</option>
+            {% for cliente in clientes %}
+            <option value="{{ cliente.id }}">{{ cliente.nombre }}</option>
+            {% endfor %}
+        </select>
+    </div>
+
+    <!-- Campo de fecha -->
+    <div class="mb-3">
+        <label for="fecha" class="form-label">Fecha:</label>
+        <input type="date" name="fecha" id="fecha" class="form-control" required>
+    </div>
+
+    <!-- Tabla de productos -->
+    <div class="mb-3">
+        <label class="form-label fw-bold">Productos:</label>
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Seleccionar</th>
+                    <th>Nombre</th>
+                    <th>Precio</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for producto in productos %}
+                <tr>
+                    <td>
+                        <input 
+                            type="checkbox" 
+                            name="productos" 
+                            value="{{ producto.id }}" 
+                            data-precio="{{ producto.precio }}"
+                        >
+                    </td>
+                    <td>{{ producto.nombre }}</td>
+                    <td>${{ producto.precio }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Campo de total -->
+    <div class="mb-3">
+        <label for="total" class="form-label fw-bold">Total:</label>
+        <input type="text" id="total" name="total" class="form-control" readonly value="$0.00">
+    </div>
+
+    <!-- Botón de envío -->
+    <button type="submit" class="btn btn-success">Guardar Compra</button>
+</form>
+
+<!-- Script para calcular el total dinámicamente -->
+<script>
+// Esperar a que el DOM esté completamente cargado
+document.addEventListener('DOMContentLoaded', function () {
+    // Obtener todos los checkboxes y el campo de total
+    const checkboxes = document.querySelectorAll('input[type="checkbox"]');
+    const totalInput = document.getElementById('total');
+
+    // Función para calcular el total
+    function calcularTotal() {
+        let total = 0;
+
+        // Iterar sobre todos los checkboxes
+        checkboxes.forEach(checkbox => {
+            if (checkbox.checked) {
+                // Sumar el precio del producto si está seleccionado
+                total += parseFloat(checkbox.getAttribute('data-precio')) || 0;
+            }
+        });
+
+        // Actualizar el campo de total con el nuevo valor
+        totalInput.value = `$${total.toFixed(2)}`;
+    }
+
+    // Escuchar cambios en cada checkbox
+    checkboxes.forEach(checkbox => {
+        checkbox.addEventListener('change', calcularTotal);
+    });
+
+    // Calcular el total inicial
+    calcularTotal();
+});
+</script>
 {% endblock %}

@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% block content %}
+{% load humanize %}
+
+<div class="container mt-4">
+    <h1 class="text-center">Resultados de búsqueda</h1>
+    <p class="text-center">Resultados para la búsqueda: <strong>{{ query }}</strong></p>
+    <div class="row">
+        {% for producto in resultados %}
+        <div class="col-md-4 producto">
+            <div class="card">
+                <img src="{{ producto.imagen.url }}" class="card-img-top" alt="{{ producto.nombre }}">
+                <div class="card-body">
+                    <h5 class="card-title">{{ producto.nombre }}</h5>
+                    <p class="card-text">{{ producto.descripcion }}</p>
+                    <p class="card-text"><strong>Precio: ${{ producto.precio|floatformat:2|intcomma }}</strong></p>
+                </div>
+            </div>
+        </div>
+        {% empty %}
+        <div class="col-12">
+            <p class="text-center">No se encontraron resultados.</p>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

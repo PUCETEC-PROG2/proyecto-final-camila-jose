@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Producto, Cliente, Compra
+from .models import Producto, Cliente, Compra, DetalleCompra
 
 # Register your models here.
 
@@ -16,4 +16,16 @@ class ClienteAdmin(admin.ModelAdmin):
 
 @admin.register(Compra)
 class CompraAdmin(admin.ModelAdmin):
-    list_display = ('cliente', 'producto', 'fecha', 'cantidad', 'total')
+    list_display = ('id', 'cliente', 'fecha', 'calcular_total')  # Campos válidos y método personalizado
+    list_filter = ('fecha', 'cliente')  # Filtrar por fecha y cliente
+    search_fields = ('cliente__nombre',)  # Permitir búsqueda por nombre del cliente
+
+    def calcular_total(self, obj):
+        return obj.calcular_total()
+    calcular_total.short_description = 'Total'  # Nombre de la columna en el admin
+
+@admin.register(DetalleCompra)
+class DetalleCompraAdmin(admin.ModelAdmin):
+    list_display = ('compra', 'producto', 'cantidad', 'subtotal')
+    list_filter = ('compra',)  # Filtrar por compra
+    search_fields = ('compra__id', 'producto__nombre')  # Permitir búsqueda por ID de compra o nombre de producto

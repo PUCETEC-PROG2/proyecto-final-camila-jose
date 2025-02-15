@@ -1,6 +1,5 @@
 from django.db import models
-
-# Create your models here.
+from django.shortcuts import render
 
 class Producto(models.Model):
     CATEGORIAS = [
@@ -18,7 +17,7 @@ class Producto(models.Model):
 
     def __str__(self):
         return self.nombre
-    
+
 class Cliente(models.Model):
     nombre = models.CharField(max_length=100)
     email = models.EmailField(unique=True)
@@ -27,14 +26,23 @@ class Cliente(models.Model):
 
     def __str__(self):
         return self.nombre
-    
+
 class Compra(models.Model):
     cliente = models.ForeignKey(Cliente, on_delete=models.CASCADE)
-    producto = models.ForeignKey(Producto, on_delete=models.CASCADE)
-    fecha = models.DateField(auto_now_add=True)
-    cantidad = models.IntegerField()
-    total = models.DecimalField(max_digits=10, decimal_places=2)
+    fecha = models.DateField()
+    total = models.DecimalField(max_digits=10, decimal_places=2)  
+    productos = models.ManyToManyField(Producto, through='DetalleCompra')
 
     def __str__(self):
-        return f"Compra de {self.producto.nombre} por {self.cliente.nombre}"
+        return f"Compra {self.id} - {self.cliente.nombre}"
+    
+class DetalleCompra(models.Model):
+    compra = models.ForeignKey(Compra, on_delete=models.CASCADE)
+    producto = models.ForeignKey(Producto, on_delete=models.CASCADE)
+    cantidad = models.PositiveIntegerField(default=1)
 
+    def subtotal(self):
+        return self.producto.precio * self.cantidad
+
+    def __str__(self):
+        return f"{self.producto} x {self.cantidad}"
