@@ -81,6 +81,6 @@ def eliminar_cliente(request, id):
     return redirect('clientes')
 
 def buscar_productos(request):
-    query = request.GET.get('q')  # Obtener la consulta de búsqueda
+    query = request.GET.get('q')  
     resultados = Producto.objects.filter(nombre__icontains=query) if query else []
     return render(request, 'buscar.html', {'query': query, 'resultados': resultados})
