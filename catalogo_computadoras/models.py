@@ -1,5 +1,6 @@
 from django.db import models
 from django.shortcuts import render
+from django.core.validators import RegexValidator
 
 class Producto(models.Model):
     CATEGORIAS = [
@@ -21,7 +22,8 @@ class Producto(models.Model):
 class Cliente(models.Model):
     nombre = models.CharField(max_length=100)
     email = models.EmailField(unique=True)
-    telefono = models.CharField(max_length=10)
+    telefono = models.CharField(max_length=10,validators=[RegexValidator(regex='^\d{10}$', message='El número de teléfono debe contener 10 dígitos.')])
+
     direccion = models.TextField()
 
     def __str__(self):
