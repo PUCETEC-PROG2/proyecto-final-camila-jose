@@ -1,7 +1,7 @@
 .card-img-top {
-    width: 100%;  /* La imagen ocupará el 100% del ancho del contenedor */
-    height: 200px;  /* Altura fija para todas las imágenes */
-    object-fit: contain;  /* Ajusta la imagen dentro del contenedor sin recortar */
-    background-color: #f8f9fa;  /* Color de fondo para los espacios vacíos */
-    border-radius: 10px;  /* Bordes redondeados (opcional) */
+    width: 100%;  
+    height: 200px;  
+    object-fit: contain;  
+    background-color: #f8f9fa;  
+    border-radius: 10px;
 }
