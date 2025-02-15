@@ -14,7 +14,7 @@ class ClienteForm(forms.ModelForm):
         widgets = {
             'nombre': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Ingresa tu nombre'}),
             'email': forms.EmailInput(attrs={'class': 'form-control', 'placeholder': 'Ingresa tu correo electrónico'}),
-            'telefono': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Ingresa tu número de teléfono'}),
+            'telefono': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Ingresa tu número de teléfono', 'maxlength': '10'}),
             'direccion': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Ingresa tu dirección'})
         }
 
